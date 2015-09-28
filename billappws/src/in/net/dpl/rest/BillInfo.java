@@ -117,5 +117,29 @@ public class BillInfo {
 	}
 	return feeds;
 	}
+	
+	@POST
+	@Path("/CurrBill")
+	@Produces("application/json")
+	public String fetchCurrBill(@FormParam("conNo") String conNo)
+	{
+		
+	String feeds=null;
+	try 
+	{
+	ArrayList<Consumer> feedData = null;
+	Project project= new Project();
+	feedData = project.fetchCurrBill(conNo);
+	Gson gson = new Gson();
+	System.out.println(gson.toJson(feedData));
+	feeds = gson.toJson(feedData);
+	}
+
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feeds;
+	}
 
 }

@@ -18,9 +18,48 @@ public class Consumer {
     private String mulFactor;
     private String reference;
     private String partyCode;
+    private String due1;
+    private String due2;
+    private String unit;
+    private String month;
+    private String prevReading;
+    private String currReading;
+    private String meterStatus;
     
     
-    public String getPartyCode() {
+    public String getMeterStatus() {
+		return meterStatus;
+	}
+
+	public void setMeterStatus(String meterStatus) {
+		this.meterStatus = meterStatus;
+	}
+
+	public String getPrevReading() {
+		return prevReading;
+	}
+
+	public void setPrevReading(String prevReading) {
+		this.prevReading = prevReading;
+	}
+
+	public String getCurrReading() {
+		return currReading;
+	}
+
+	public void setCurrReading(String currReading) {
+		this.currReading = currReading;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public String getPartyCode() {
 		return partyCode;
 	}
 
@@ -124,6 +163,30 @@ public class Consumer {
 
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	public String getDue1() {
+		return due1;
+	}
+
+	public void setDue1(String due1) {
+		this.due1 = due1;
+	}
+
+	public String getDue2() {
+		return due2;
+	}
+
+	public void setDue2(String due2) {
+		this.due2 = due2;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
     
     

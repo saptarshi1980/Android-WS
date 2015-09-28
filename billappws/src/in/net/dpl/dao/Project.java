@@ -125,4 +125,54 @@ public ArrayList<Consumer> getDashboard(String conNo) {
 	return null;
 }
 
+
+public ArrayList<Consumer> fetchCurrBill(String conNo) {
+	
+	
+		
+		ArrayList<Consumer> feedData = new ArrayList<Consumer>();
+		try
+			{
+			
+			String month,lastReading,presentReading,meterStatus,amountDue,tariff,phase,demand,mf,unit,due1,due2;
+			Connection conn=new ConnDB().make_connection();	
+			PreparedStatement ps = conn.prepareStatement("SELECT MONTH,last_read,curr_read,mf,meter_status,unit,bill_amount,DATE_FORMAT(due_date1,'%d-%m-%Y') AS due_date1,DATE_FORMAT(due_date2,'%d-%m-%Y') AS due_date2 FROM v_curr_bill where con_no='"+conNo+"'");
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next())
+			{
+				
+			Consumer consumer = new Consumer();
+			month=rs.getString(1);
+			lastReading=rs.getString(2);
+			presentReading=rs.getString(3);
+			mf=rs.getString(4);
+			meterStatus=rs.getString(5);
+			unit=rs.getString(6);
+			amountDue=rs.getString(7);
+			due1=rs.getString(8);
+			due2=rs.getString(9);
+			consumer.setMonth(month);
+			consumer.setPrevReading(lastReading);
+			consumer.setCurrReading(presentReading);
+			consumer.setMulFactor(mf);
+			consumer.setMeterStatus(meterStatus);
+			consumer.setUnit(unit);
+			consumer.setAmountDue(amountDue);
+			consumer.setDue1(due1);
+			consumer.setDue2(due2);
+			feedData.add(consumer);
+			
+			}
+			return feedData;
+			}
+			
+			catch(SQLException e)
+			{
+			e.printStackTrace();
+			}
+		
+		return null;
+	}
+
 }
