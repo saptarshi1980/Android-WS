@@ -175,4 +175,81 @@ public ArrayList<Consumer> fetchCurrBill(String conNo) {
 		return null;
 	}
 
+public ArrayList<Tariff> fetchTariff(String conNo) {
+	
+	
+	
+	ArrayList<Tariff> feedData = new ArrayList<Tariff>();
+	try
+		{
+		
+		String head,consumption,rate;
+		Connection conn=new ConnDB().make_connection();	
+		PreparedStatement ps = conn.prepareStatement("SELECT head,consumption,rate FROM tariff where con_no='"+conNo+"'");
+		ResultSet rs = ps.executeQuery();
+		
+		while(rs.next())
+		{
+			
+		Tariff tariff = new Tariff();
+		head=rs.getString(1);
+		consumption=rs.getString(2);
+		rate=rs.getString(3);
+		tariff.setHead(head);
+		tariff.setConsumption(consumption);
+		tariff.setRate(rate);
+		feedData.add(tariff);
+		
+		}
+		return feedData;
+		}
+		
+		catch(SQLException e)
+		{
+		e.printStackTrace();
+		}
+	
+	return null;
+}
+
+
+public ArrayList<BillHistory> billHistory(String conNo) 
+{
+	ArrayList<BillHistory> feedData = new ArrayList<BillHistory>();
+		try
+		{
+		
+		
+		Connection conn=new ConnDB().make_connection();	
+		PreparedStatement ps = conn.prepareStatement("SELECT con_no,party_code,name,MONTH,last_read,curr_read,mf,meter_status,unit,bill_amount,DATE_FORMAT(due_date1,'%d-%m-%Y') AS due_date1,DATE_FORMAT(due_date2,'%d-%m-%Y') AS due_date2 FROM v_last_3_bill WHERE con_no='"+conNo+"' ORDER BY bill_month DESC LIMIT 3");
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+		BillHistory feedObject = new BillHistory();
+		feedObject.setConNo(rs.getString("con_no"));
+		feedObject.setPartyCode(rs.getString("party_code"));
+		feedObject.setName(rs.getString("name"));
+		feedObject.setBillMonth(rs.getString("month"));
+		feedObject.setLastRead(rs.getString("last_read"));
+		feedObject.setCurrRead(rs.getString("curr_read"));
+		feedObject.setMf(rs.getString("mf"));
+		feedObject.setMeterStatus(rs.getString("meter_status"));
+		feedObject.setUnit(rs.getString("unit"));
+		feedObject.setBillAmount(rs.getString("bill_amount"));
+		feedObject.setDueDate1(rs.getString("due_date1"));
+		feedObject.setDueDate2(rs.getString("due_date2"));
+		feedData.add(feedObject);
+		}
+		return feedData;
+		}
+		catch(SQLException e)
+		{
+		e.printStackTrace();
+		}finally{
+		
+		}
+		return feedData;
+}
+
+
 }

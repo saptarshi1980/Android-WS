@@ -20,8 +20,10 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 
 import in.net.dpl.dao.Project;
+import in.net.dpl.dto.BillHistory;
 import in.net.dpl.dto.Consumer;
 import in.net.dpl.dto.FeedObjects;
+import in.net.dpl.dto.Tariff;
 import in.net.dpl.utility.ExamineMessage;
  
 @Path("/billinfo")
@@ -107,7 +109,6 @@ public class BillInfo {
 	Project project= new Project();
 	feedData = project.getDashboard(conNo);
 	Gson gson = new Gson();
-	System.out.println(gson.toJson(feedData));
 	feeds = gson.toJson(feedData);
 	}
 
@@ -131,7 +132,7 @@ public class BillInfo {
 	Project project= new Project();
 	feedData = project.fetchCurrBill(conNo);
 	Gson gson = new Gson();
-	System.out.println(gson.toJson(feedData));
+	//System.out.println(gson.toJson(feedData));
 	feeds = gson.toJson(feedData);
 	}
 
@@ -141,5 +142,55 @@ public class BillInfo {
 	}
 	return feeds;
 	}
+	
+	@POST
+	@Path("/GetTariff")
+	@Produces("application/json")
+	public String getTariff(@FormParam("conNo") String conNo)
+	{
+		
+	String feeds=null;
+	try 
+	{
+	ArrayList<Tariff> feedData = null;
+	Project project= new Project();
+	feedData = project.fetchTariff(conNo);
+	Gson gson = new Gson();
+	//System.out.println(gson.toJson(feedData));
+	feeds = gson.toJson(feedData);
+	}
+
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feeds;
+	}
+	
+	@POST
+	@Path("/BillHistory")
+	@Produces("application/json")
+	public String billHistory(@FormParam("conNo") String conNo)
+	{
+	String feeds=null;
+	try 
+	{
+	ArrayList<BillHistory> feedData = null;
+	Project project= new Project();
+	feedData = project.billHistory(conNo);
+	Gson gson = new Gson();
+	//System.out.println(gson.toJson(feedData));
+	feeds = gson.toJson(feedData);
+	}
+
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feeds;
+	}
+
+	
+	
 
 }
