@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import java.sql.Statement;
+
 import in.net.dpl.dto.*;
 import in.net.dpl.utility.*;
 
@@ -250,6 +252,120 @@ public ArrayList<BillHistory> billHistory(String conNo)
 		}
 		return feedData;
 }
+
+public String conPattern(String conNo) 
+{
+	ArrayList<ConsumptionPattern> feedData = new ArrayList<ConsumptionPattern>();
+	StringBuilder str = new StringBuilder();
+		try
+		{
+		
+		
+		Connection conn=new ConnDB().make_connection();	
+		PreparedStatement ps = conn.prepareStatement("SELECT DATE_FORMAT(STR_TO_DATE(bill_month,'%Y%m'),'%M-%y') AS bill_month,CAST(unit AS CHAR) AS unit  FROM v_last_3_bill  WHERE con_no='"+conNo+"' ORDER BY STR_TO_DATE(bill_month,'%Y%m') LIMIT 3");
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			if(str.length()>0)
+			str.append("|"+rs.getString(1)+"|"+rs.getString(2));
+			else
+			str.append(rs.getString(1)+"|"+rs.getString(2));	
+			
+		}
+		
+		
+		return str.toString();
+		}
+		catch(SQLException e)
+		{
+		e.printStackTrace();
+		}finally{
+		
+		}
+		return str.toString();
+}
+
+public String updateEmail(String conNo,String emailId) 
+{
+	
+	
+		try
+		{
+		
+		Connection conn=new ConnDB().make_connection();	
+		PreparedStatement ps = conn.prepareStatement("SELECT * from contact where con_no='"+conNo+"'");
+		ResultSet rs = ps.executeQuery();
+		int counter=0;
+		while(rs.next())
+		{
+			counter++;
+			
+		}
+		 if(counter==0){
+			 
+			 
+			 Statement stmt=conn.createStatement();
+			 stmt.executeUpdate("insert into contact(con_no,email_id) values('"+conNo+"','"+emailId+"')" );
+		 }
+		 
+		 else{
+			 
+			 Statement stmt=conn.createStatement();
+			 stmt.executeUpdate("update contact set email_id='"+emailId+"' where con_no='"+conNo+"'");
+		 }
+		
+		
+		}
+		catch(SQLException e)
+		{
+		e.printStackTrace();
+		}finally{
+		
+		}
+		return "SUCCESS";
+}
+
+
+public String updateMobile(String conNo,String mobile) 
+{
+	
+	
+		try
+		{
+		
+		Connection conn=new ConnDB().make_connection();	
+		PreparedStatement ps = conn.prepareStatement("SELECT * from contact where con_no='"+conNo+"'");
+		ResultSet rs = ps.executeQuery();
+		int counter=0;
+		while(rs.next())
+		{
+			counter++;
+			
+		}
+		 if(counter==0){
+			 
+			 
+			 Statement stmt=conn.createStatement();
+			 stmt.executeUpdate("insert into contact(con_no,mobile_no) values('"+conNo+"','"+mobile+"')" );
+		 }
+		 
+		 else{
+			 
+			 Statement stmt=conn.createStatement();
+			 stmt.executeUpdate("update contact set mobile_no='"+mobile+"' where con_no='"+conNo+"'");
+		 }
+		
+		
+		}
+		catch(SQLException e)
+		{
+		e.printStackTrace();
+		}finally{
+		
+		}
+		return "SUCCESS";
+}
+
 
 
 }

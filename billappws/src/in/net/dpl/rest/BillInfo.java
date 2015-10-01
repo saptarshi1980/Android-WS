@@ -189,7 +189,74 @@ public class BillInfo {
 	}
 	return feeds;
 	}
+	
+	@POST
+	@Path("/ConPattern")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String conPattern(@FormParam("conNo") String conNo)
+	{
+	
+	String feedData = null;
+	try 
+	{
+	
+	Project project= new Project();
+	feedData = project.conPattern(conNo);
+	//Gson gson = new Gson();
+	//System.out.println(gson.toJson(feedData));
+	//feeds = gson.toJson(feedData);
+	}
 
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feedData;
+	}
+
+	@POST
+	@Path("/UpdateEmail")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String updateEmail(@FormParam("conNo") String conNo,@FormParam("emailId") String emailId)
+	{
+	
+	String feedData = null;
+	try 
+	{
+	
+	Project project= new Project();
+	feedData = project.updateEmail(conNo, emailId);
+	
+	}
+
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feedData;
+	}
+
+	@POST
+	@Path("/UpdateMobile")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String updateMobile(@FormParam("conNo") String conNo,@FormParam("mobile") String mobile)
+	{
+	
+	String feedData = null;
+	try 
+	{
+	
+	Project project= new Project();
+	feedData = project.updateMobile(conNo,mobile);
+	
+	}
+
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feedData;
+	}
 	
 	
 
