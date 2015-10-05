@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import java.sql.Statement;
 
 import in.net.dpl.dto.*;
@@ -365,6 +364,111 @@ public String updateMobile(String conNo,String mobile)
 		}
 		return "SUCCESS";
 }
+
+
+
+public String calculateBill(String conNo,String unit) 
+{
+	double billAmt=0.0;
+	double phase=0.0;
+	double load=0.0;
+	double energyCharge=0.0;
+	double fixedCharge=0.0;
+	double meterRent=0.0;
+	double mvca=0.0;
+	double dutyPer=0.0;
+	double dutyAmt=0.0;
+	String billAmtAsString=null;
+	
+	
+	
+		try
+		{
+		
+		String finYear=new FiscalYear().getFiscalYear();
+		String catType=null;
+		Connection conn=new ConnDB().make_connection();	
+		PreparedStatement ps = conn.prepareStatement("SELECT cat_type,PHASE,CON_load FROM P_CONS WHERE con_no='"+conNo+"'");
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			catType=rs.getString(1);
+			phase=rs.getDouble(2);
+			load=rs.getDouble(3);
+			
+		}
+		 
+		 
+			 Statement stmt=conn.createStatement();
+			 ResultSet rsBill=stmt.executeQuery("SELECT round((ADD_AMOUNT+('"+unit+"'-LOWER_UNIT+1)*RATE))AS BILL_AMT FROM P_RATE WHERE fin_year='"+finYear+"' AND matter='E' AND CAT_TYPE='"+catType+"'AND '"+unit+"' BETWEEN LOWER_UNIT AND UPPER_UNIT" );
+		  
+			 while(rsBill.next())
+				{
+					energyCharge=rsBill.getDouble(1);
+					
+				}
+			 
+			 Statement stmt2=conn.createStatement();
+			 ResultSet rsBill2=stmt2.executeQuery("SELECT rate AS rate FROM p_vrate ORDER BY STR_TO_DATE(MONTH,'%Y%m') DESC LIMIT 1" );
+		  
+			 while(rsBill2.next())
+				{
+					mvca=rsBill2.getDouble(1)*Double.parseDouble(unit);
+					
+				}
+			 
+			 Statement stmt3=conn.createStatement();
+			 ResultSet rsBill3=stmt3.executeQuery("SELECT rate FROM tariff WHERE con_no='"+conNo+"' AND head='Fixed Charge'" );
+		  
+			 while(rsBill3.next())
+				{
+					fixedCharge=rsBill3.getDouble(1)*load;
+					
+				}
+			 Statement stmt4=conn.createStatement();
+			 ResultSet rsBill4=stmt4.executeQuery("SELECT AMOUNT FROM p_mrent WHERE cat_type='"+catType+"' AND PHASE='"+catType+"' AND fin_year='"+finYear+"' AND meter_type='E'" );
+		  
+			 while(rsBill4.next())
+				{
+					meterRent=rsBill4.getDouble(1);
+					
+				}
+			 
+			 Statement stmt5=conn.createStatement();
+			 ResultSet rsBill5=stmt5.executeQuery("SELECT RATE FROM p_rate WHERE fin_year='"+finYear+"' AND matter='D' AND CAT_TYPE='"+catType+"' AND '"+unit+"' BETWEEN LOWER_UNIT AND UPPER_UNIT LIMIT 1" );
+		  
+			 while(rsBill5.next())
+				{
+					dutyPer=rsBill5.getDouble(1);
+					
+				}
+			 
+			 	 		 		 
+			 
+			 
+			 dutyAmt=(energyCharge+mvca+fixedCharge)*dutyPer/100;
+			 
+			 
+			 
+			 billAmt=energyCharge+meterRent+fixedCharge+mvca+dutyAmt;
+			 
+			 
+			 billAmtAsString=String.valueOf(Math.round(billAmt))+"|"+String.valueOf(Math.round(energyCharge))+"|"+String.valueOf(Math.round(meterRent))+"|"+String.valueOf(Math.round(fixedCharge))+"|"+String.valueOf(Math.round(mvca)+"|"+String.valueOf(Math.round(dutyAmt)));
+			 
+		
+			 
+			 
+		}
+		catch(SQLException e)
+		{
+		e.printStackTrace();
+		}finally{
+		
+		}
+		return String.valueOf(billAmtAsString);
+}
+
+
 
 
 

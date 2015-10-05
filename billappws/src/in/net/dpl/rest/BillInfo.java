@@ -258,6 +258,28 @@ public class BillInfo {
 	return feedData;
 	}
 	
+	@POST
+	@Path("/CalculateBill")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String calculateBill(@FormParam("conNo") String conNo,@FormParam("unit") String unit)
+	{
+	
+	String feedData = null;
+	try 
+	{
+	
+	Project project= new Project();
+	feedData = project.calculateBill(conNo, unit);
+	
+	}
+
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feedData;
+	}
+	
 	
 
 }
