@@ -469,6 +469,92 @@ public String calculateBill(String conNo,String unit)
 }
 
 
+public String fetchEmail(String conNo) 
+{
+	String email=null;
+
+	
+	
+		try
+		{
+		
+		Connection conn=new ConnDB().make_connection();	
+		PreparedStatement ps = conn.prepareStatement("SELECT email_id from contact where con_no='"+conNo+"'");
+		ResultSet rs = ps.executeQuery();
+				int counter=0;
+		while(rs.next())
+		{
+			counter++;
+			email=rs.getString(1);
+			
+			
+		}
+		 if(counter==0){
+			 
+			 
+			 return "NA";
+		 }
+		 
+		 else{
+			 
+			 return email;
+		 }
+		
+		
+		}
+		catch(SQLException e)
+		{
+		e.printStackTrace();
+		}finally{
+		
+		}
+		return email;
+}
+
+
+public String fetchMobile(String conNo) 
+{
+	String mobile=null;
+
+	
+	
+		try
+		{
+		
+		Connection conn=new ConnDB().make_connection();	
+		PreparedStatement ps = conn.prepareStatement("SELECT mobile_no from contact where con_no='"+conNo+"'");
+		ResultSet rs = ps.executeQuery();
+				int counter=0;
+		while(rs.next())
+		{
+			counter++;
+			mobile=rs.getString(1);
+			
+			
+		}
+		 if(counter==0){
+			 
+			 
+			 return "NA";
+		 }
+		 
+		 else{
+			 
+			 return mobile;
+		 }
+		
+		
+		}
+		catch(SQLException e)
+		{
+		e.printStackTrace();
+		}finally{
+		
+		}
+		return mobile;
+}
+
+
 
 
 

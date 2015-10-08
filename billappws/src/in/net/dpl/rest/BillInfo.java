@@ -280,6 +280,49 @@ public class BillInfo {
 	return feedData;
 	}
 	
+	@POST
+	@Path("/FetchEmail")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String fetchEmail(@FormParam("conNo") String conNo)
+	{
+	
+	String feedData = null;
+	try 
+	{
+	
+	Project project= new Project();
+	feedData = project.fetchEmail(conNo);
+	
+	}
+
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feedData;
+	}
+
+	@POST
+	@Path("/FetchMobile")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String fetchMobile(@FormParam("conNo") String conNo)
+	{
+	
+	String feedData = null;
+	try 
+	{
+	
+	Project project= new Project();
+	feedData = project.fetchMobile(conNo);
+	
+	}
+
+	catch (Exception e)
+	{
+	System.out.println("Exception Error"); //Console 
+	}
+	return feedData;
+	}
 	
 
 }
